@@ -1,0 +1,16 @@
+{
+  "name": "Denison Course Calendar Event Generator",
+  "version": "0.1",
+  "description": "A Chrome Extension that generates calendar events based on student's detail schedule in Self-Service Banner of Denison University.",
+  "icons" : {
+    "48" : "icon-48.png",
+    "128" : "icon-128.png"
+  },
+  "manifest_version": 2,
+  "content_scripts" : [
+    {
+      "matches" : ["https://web4prod.denison.edu/pls/web4prod/bwskfshd.P_CrseSchdDetl"],
+      "js":["generator.js"]
+    }
+  ]
+}
