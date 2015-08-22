@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(function() {
         // That fires when a page's URL contains a 'g' ...
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { hostEquals: 'web4prod.denison.edu', shcemes: ['https'] },
+            pageUrl: { urlEquals: 'https://web4prod.denison.edu/pls/web4prod/bwskfshd.P_CrseSchdDetl' },
           })
         ],
         // And shows the extension's page action.
