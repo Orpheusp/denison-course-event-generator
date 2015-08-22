@@ -6,3 +6,5 @@ chrome-extension/._main.js
 ._.gitignore
 
 chrome-extension/._course-event-CSV-generator.js
+
+chrome-extension/._background.js
