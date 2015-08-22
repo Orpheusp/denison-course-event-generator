@@ -6,7 +6,7 @@ function addNewCourse(courses, courseTitle, courseEntities) {
     'Day' : [entityValue(courseEntities[1])],
     'Place' : [entityValue(courseEntities[2])],
     'Course ID' : entityValue(courseEntities[5]),
-    'Instructor' : entityValue(courseEntities[11]).replace('(Pmailto:/', '(') + ')',
+    'Instructor' : entityValue(courseEntities[11]).replace('(Pmailto:', '(') + ')',
     'Exam Code' : entityValue(courseEntities[13])
   }
 }
@@ -108,7 +108,7 @@ function calendarHead() {
 
 function courseICalEvent(courseName, course) {
   var output = '';
-  var endDay = '20150913T160000';
+  var endDay = '20151212T000000';
   var createdTime = new Date();
   // Assuming that for every course time period there is a Place and a Day entities assorciated with it.
   for (var i = 0; i < course['Time'].length; i ++) {
@@ -119,7 +119,7 @@ function courseICalEvent(courseName, course) {
     output += 'RRULE:FREQ=WEEKLY;UNTIL=' + endDay + ';BYDAY=' + decomposeDay(course['Day'][i]) + '\n';
     output += 'CREATED:' + formatOutputDate(createdTime) + '\n';
     output += 'SUMMARY:' + course['Course ID'] + ': ' + courseName + '\n';
-    output += 'LOCATION:' + course['Place'] + '\n';
+    output += 'LOCATION:' + course['Place'][i] + '\n';
     output += 'STATUS:CONFIRMED\n';
     output += 'DESCRIPTION:' + '[Instructor] ' + course['Instructor'] + ' [Exam Code] ' + course['Exam Code'] + '\n';
     output += 'END:VEVENT\n';
@@ -137,13 +137,13 @@ function decomposeStartDay(days) {
 
 function decomposeStartTime(timeInterval, days) {
   var startTime = timeInterval.split('-')[0].trim();
-  var outputDate = new Date(decomposeStartDay(days) + ' ' + startTime + ' GMT-0500');
+  var outputDate = new Date(decomposeStartDay(days) + ' ' + startTime + ' GMT-0000');
   return formatOutputDate(outputDate);
 }
 
 function decomposeEndTime(timeInterval, days) {
   var endTime = timeInterval.split('-')[1].trim();
-  var outputDate = new Date(decomposeStartDay(days) + ' ' + endTime + ' GMT-0500');
+  var outputDate = new Date(decomposeStartDay(days) + ' ' + endTime + ' GMT-0000');
   return formatOutputDate(outputDate);
 }
 
@@ -164,68 +164,3 @@ function formatOutputDate(outputDate) {
   return outputDate.toISOString().replace(/-|:|.000Z/g, '');
 }
 
-function exportCourseCSV() {
-  // Get the course table.
-  var courseTable = document.getElementsByClassName('datadisplaytable')[0];
-  
-  var entityValue;
-  // Get the headers of the table.
-  var headers = [];
-  var courseTableHeaders = courseTable.getElementsByTagName('th');
-  var output = '';
-  for (var i = 0; i < courseTableHeaders.length; i ++) {
-    entityValue = courseTableHeaders[i].firstChild.nodeValue
-    output += entityValue;
-    output += ', ';
-    headers.push(entityValue);
-  }
-  output += '\n';
-  
-  // Get all courses row by row.
-  var courseRows = courseTable.getElementsByTagName('tr');
-  var courseRow, courseEntities, courseEntity, courseAbbr, courseEmail;
-  
-  for (var j = 0; j < courseRows.length; j ++) {
-    // Get each row
-    courseRow = courseRows[j];
-    // Get all entities of the row.
-    courseEntities = courseRow.getElementsByTagName('td');
-    for (var k = 0; k < courseEntities.length; k ++) {
-      courseEntity = courseEntities[k];
-      
-      // Get <abbr> embedded in the entity, if such element exists.
-      courseAbbr = courseEntity.getElementsByTagName('abbr')[0];
-      // Get <a> embedded in the entity, if such element exists.
-      courseEmail = courseEntity.getElementsByTagName('a')[0];
-      if (courseEntity.firstChild.nodeValue) {
-        output += courseEntity.firstChild.nodeValue;
-      }
-      if (courseAbbr) {
-        output += courseAbbr.firstChild.nodeValue;
-      }
-      if (courseEmail) {
-        output += courseEmail.href;
-      }
-      output += ', ';
-    }
-    output += '\n';
-  }
-  
-  // Write to csv file.
-  var outputFile = document.createElement('a');
-  outputFile.download = 'course_calendar.csv';
-  outputFile.href = 'data:text/csv;charset=utf-8,' + escape(output);
-  outputFile.click();
-}
-
-var exportButton = document.createElement('BUTTON');
-var exportButtonText = document.createTextNode('EXPORT COURSE ICAL');
-exportButton.appendChild(exportButtonText);
-exportButton.addEventListener('click', exportCourseICal, false);
-document.getElementsByClassName('pageheaderlinks')[0].appendChild(exportButton);
-
-var extractButton = document.createElement('BUTTON');
-var extractButtontext = document.createTextNode('EXTRACT COURSES');
-extractButton.appendChild(extractButtontext);
-extractButton.addEventListener('click', extractCourses, false);
-document.getElementsByClassName('pageheaderlinks')[0].appendChild(extractButton);

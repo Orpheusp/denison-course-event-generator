@@ -11,7 +11,7 @@
   "content_scripts" : [
     {
       "matches" : ["https://web4prod.denison.edu/pls/web4prod/bwskfshd.P_CrseSchdDetl"],
-      "js":["generator.js"]
+      "js":["course-event-iCal-generator.js", "course-event-CSV-generator.js", "main.js"]
     }
   ]
 }
