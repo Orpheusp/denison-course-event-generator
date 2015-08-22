@@ -20,23 +20,23 @@ function appendCourse(courses, courseTitle, courseEntities) {
 function entityValue(entity) {
   var retVal = '';
   // Get <abbr> embedded in the entity, if such element exists.
-  courseAbbr = courseEntity.getElementsByTagName('abbr')[0];
+  abbr = entity.getElementsByTagName('abbr')[0];
   // Get <a> embedded in the entity, if such element exists.
-  courseLink = courseEntity.getElementsByTagName('a')[0];
-  if (courseEntity.firstChild.nodeValue) {
-    retVal += courseEntity.firstChild.nodeValue;
+  link = entity.getElementsByTagName('a')[0];
+  if (entity.firstChild.nodeValue) {
+    retVal += entity.firstChild.nodeValue;
   }
-  if (courseAbbr) {
-    retVal += courseAbbr.firstChild.nodeValue;
+  if (abbr) {
+    retVal += abbr.firstChild.nodeValue;
   }
-  if (courseLink) {
-    retVal += courseLink.href;
+  if (link) {
+    retVal += link.href;
   }
   return retVal;
 }
 
 function extractCourses() {
-  var courseTable = document.getElementsByTagName('datadisplaytable')[0];
+  var courseTable = document.getElementsByClassName('datadisplaytable')[0];
   var courseRows = courseTable.getElementsByTagName('tr');
   var courseEntities;
   var isCourseExtension;
@@ -45,14 +45,31 @@ function extractCourses() {
   for (var i = 0; i < courseRows.length; i ++) {
     courseEntities = courseRows[i].getElementsByTagName('td');
     isCourseExtension = courseRows[i].getElementsByClassName('dddead');
-    if (isCourseExtension) {
-      appendCourse(courses, currCourseTitle, courseEntities);
-    } else {
-      currCourseTitle = entityValue(courseEntities[6]);
-      addNewCourse(courses, currCourseTitle, courseEntities);
+    if (courseEntities.length) {
+      if (isCourseExtension.length) {
+        appendCourse(courses, currCourseTitle, courseEntities);
+      } else {
+        currCourseTitle = entityValue(courseEntities[6]);
+        addNewCourse(courses, currCourseTitle, courseEntities);
+      }
     }
   }
+  logCourses(courses);
   return courses;
+}
+
+function logCourses(courses) {
+  var keys = Object.keys(courses);
+  var course;
+  for (var j = 0; j < keys.length; j ++) {
+    console.log(keys[j]);
+    console.log('  Time: ' + courses[keys[j]]['Time']);
+    console.log('  Day: ' + courses[keys[j]]['Day']);
+    console.log('  Place: ' + courses[keys[j]]['Place']);
+    console.log('  Course ID: ' + courses[keys[j]]['Course ID']);
+    console.log('  Instructor: ' + courses[keys[j]]['Instructor']);
+    console.log('  Exam Code: ' + courses[keys[j]]['Exam Code']);
+  }
 }
 
 function exportCourseCSV() {
@@ -106,8 +123,14 @@ function exportCourseCSV() {
   window.open('data:text/csv;charset=utf-8,' + escape(output));
 }
 
-var btn = document.createElement('BUTTON');
-var text = document.createTextNode('EXPORT COURSE CSV');
-btn.appendChild(text);
-btn.addEventListener('click', exportCourseCSV, false);
-document.getElementsByClassName('pageheaderlinks')[0].appendChild(btn);
+var exportButton = document.createElement('BUTTON');
+var exportButtonText = document.createTextNode('EXPORT COURSE CSV');
+exportButton.appendChild(exportButtonText);
+exportButton.addEventListener('click', exportCourseCSV, false);
+document.getElementsByClassName('pageheaderlinks')[0].appendChild(exportButton);
+
+var extractButton = document.createElement('BUTTON');
+var extractButtontext = document.createTextNode('EXTRACT COURSES');
+extractButton.appendChild(extractButtontext);
+extractButton.addEventListener('click', extractCourses, false);
+document.getElementsByClassName('pageheaderlinks')[0].appendChild(extractButton);
