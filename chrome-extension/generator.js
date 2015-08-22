@@ -12,7 +12,34 @@ function exportCourseEvent() {
   output += '\n';
   
   // Get all courses row by row.
-  var courseRows = courseTable.getElementsByTagName('');
+  var courseRows = courseTable.getElementsByTagName('tr');
+  var courseRow, courseEntities, courseEntity, courseAbbr, courseEmail;
+  for (var j = 0; j < courseRows.length; j ++) {
+    // Get each row
+    courseRow = courseRows[j];
+    // Get all entities of the row.
+    courseEntities = courseRow.getElementsByTagName('td');
+    for (var k = 0; k < courseEntities.length; k ++) {
+      courseEntity = courseEntities[k];
+      // Get <abbr> embedded in the entity, if such element exists.
+      courseAbbr = courseEntity.getElementsByTagName('abbr');
+      // Get <a> embedded in the entity, if such element exists.
+      courseEmail = courseEntity.getElementsByTagName('a');
+      if (courseEntity.firstChild.nodeValue) {
+        output += courseEntity.firstChild.nodeValue;
+      }
+      if (courseAbbr) {
+        output += courseAbbr.firstChild.nodeValue;
+      }
+      if (courseEmail) {
+        output += courseEmail.href;
+      }
+      output += ', ';
+    }
+    output += '\n';
+  }
+  
+  // Write to csv file.
   window.open('data:text/csv;charset=utf-8,' + escape(output));
 }
 
