@@ -93,6 +93,11 @@ function extractCourses() {
   return courses;
 }
 
+/*
+    @function logCourses
+    @brief A helper function that prints all properties of all courses in the group of courses in javascript console. 
+    @param courses The group of courses to be printed.
+ */
 function logCourses(courses) {
   var keys = Object.keys(courses);
   var course;
@@ -108,6 +113,12 @@ function logCourses(courses) {
   }
 }
 
+/*
+    @function exportCourseICal
+    @brief Create and initiate the download of an iCal file with file extension "ics" that contains a group of course
+        events repeated weekly until the specified end day of class. This iCal file can then be exported to calendar
+        services such as Google Calendar.
+ */
 function exportCourseICal() {
   var courses = extractCourses();
   var output = '';
@@ -132,6 +143,11 @@ function exportCourseICal() {
   outputFile.click();
 }
 
+/*
+    @function calendarHead
+    @brief Create a string that contains head information required in an iCal file.
+    @return A string of the head of the iCal file.
+*/
 function calendarHead() {
   var output = '';
   output += 'PRODID:-//Google Inc//Google Calendar 70.9054//EN\n';
@@ -141,6 +157,13 @@ function calendarHead() {
   return output;
 }
 
+/*
+    @function courseICalEvent
+    @brief Create and return a calendar event for a course with the specified course name.
+    @param courseName The name of the course.
+    @param course The course object that is used to create the calendar event.
+    @return A calendar event for a course with the specified course name.
+ */
 function courseICalEvent(courseName, course) {
   var output = '';
   var endDay = '20151212T000000';
