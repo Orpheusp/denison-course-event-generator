@@ -1,3 +1,17 @@
+/*
+    @function addNewCourse
+    @brief Add a new course object with properties specified in courseEntities to courses object.
+        A set of typical course properties includes:
+        1. Time: A list of time(s) of a day when the course takes place.
+        2. Day: A list of day(s) of the week when the course takes place.
+        3. Place: A list of location(s) where the course takes place.
+        4. Course ID: The unique identifier of the course.
+        5. Instructor: The instructor(s) of the course.
+        6. Exam Code: The exam code of the course.
+    @param courses A group of course objects.
+    @param courseTitle The title of the course.
+    @param courseEntities Entities that contain properties of the course.
+ */
 function addNewCourse(courses, courseTitle, courseEntities) {
   // This function is for extracting a course from a courseRow and adding the course to a existing courses object.
   // Notice that the coursesEntities object must be complete.
@@ -11,12 +25,25 @@ function addNewCourse(courses, courseTitle, courseEntities) {
   }
 }
 
+/*
+    @function appendCourse
+    @brief Insert additional course properties to an existing course in courses.
+    @param courses A group of course objects.
+    @param courseTitle The title of the course.
+    @param courseEntities Entities that contain properties of the course.
+ */
 function appendCourse(courses, courseTitle, courseEntities) {
   courses[courseTitle]['Time'].push(entityValue(courseEntities[0]));
   courses[courseTitle]['Day'].push(entityValue(courseEntities[1]));
   courses[courseTitle]['Place'].push(entityValue(courseEntities[2]));
 }
 
+/* 
+    @function entityValue
+    @brief Extract value from the entity node.
+    @param entity The entity node to be extracted.
+    @return A string with extracted value from the entity.
+ */
 function entityValue(entity) {
   var retVal = '';
   // Get <abbr> embedded in the entity, if such element exists.
@@ -35,6 +62,15 @@ function entityValue(entity) {
   return retVal;
 }
 
+/*
+    @function extractCourses
+    @brief Create and return a gourp of courses with properties extracted from student detail schedule.
+    @note In most of the time, each row of the table contains all properties of a course. However, 
+        there are exceiptions:
+        1. Some course's time and location have not been determined, marked as "TBA" in the table.
+        2. Some course may have two sets of timing and location.
+    @return A group of courses with certain properties.
+ */
 function extractCourses() {
   var courseTable = document.getElementsByClassName('datadisplaytable')[0];
   var courseRows = courseTable.getElementsByTagName('tr');
