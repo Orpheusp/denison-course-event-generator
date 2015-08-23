@@ -1,28 +1,32 @@
 function exportCourseFinalICal() {
-  httpGetAsync("https://denison.edu/academics/curriculum/final-exam-schedule", function(responseXML) {
-    var finalTimeTable = decomposeFinalTimeTable(responseXML);
-    
-    var courses = extractCourses();
-    var output = '';
-    output += 'BEGIN:VCALENDAR\n';
+  httpGetAsync(
+    'https://denison.edu/academics/curriculum/final-exam-schedule', 
+    function(responseXML) {
+    if (responseXML) {
+      var finalTimeTable = decomposeFinalTimeTable(responseXML);
 
-    // Add calendar information.
-    output += calendarHead();
+      var courses = extractCourses();
+      var output = '';
+      output += 'BEGIN:VCALENDAR\n';
 
-    // Add course event course by course.
-    var keys = Object.keys(courses);
-    var course;
-    for (var j = 0; j < keys.length; j ++) {
-      output += courseFinalICalEvent(keys[j], courses[[keys[j]]], finalTimeTable);
+      // Add calendar information.
+      output += calendarHead();
+
+      // Add course event course by course.
+      var keys = Object.keys(courses);
+      var course;
+      for (var j = 0; j < keys.length; j ++) {
+        output += courseFinalICalEvent(keys[j], courses[[keys[j]]], finalTimeTable);
+      }
+
+      output += 'END:VCALENDAR\n';
+
+      // Write to iCal file.
+      var outputFile = document.createElement('a');
+      outputFile.download = 'course_final_calendar.ics';
+      outputFile.href = 'data:text/calendar;charset=utf-8,' + escape(output);
+      outputFile.click();
     }
-
-    output += 'END:VCALENDAR\n';
-
-    // Write to iCal file.
-    var outputFile = document.createElement('a');
-    outputFile.download = 'course_final_calendar.ics';
-    outputFile.href = 'data:text/calendar;charset=utf-8,' + escape(output);
-    outputFile.click();
   });
 }
 

@@ -16,9 +16,9 @@
     "default_title" : "Student Detail Schedule detected."
   },
   "permissions": [
-    "declarativeContent"
+    "declarativeContent",
+    "https://denison.edu/"
   ],
-  "manifest_version": 2,
   "content_scripts" : [
     {
       "matches" : ["https://web4prod.denison.edu/pls/web4prod/bwskfshd.P_CrseSchdDetl"],
@@ -27,5 +27,7 @@
             "course-final-iCal-generator.js",
             "main.js"]
     }
-  ]
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self' https://denison.edu/",
+  "manifest_version": 2
 }
