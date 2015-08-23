@@ -1,7 +1,6 @@
 function exportCourseFinalICal() {
   httpGetAsync("https://denison.edu/academics/curriculum/final-exam-schedule", function(responseXML) {
     var finalTimeTable = decomposeFinalTimeTable(responseXML);
-    //logFinalTimeTable(finalTimeTable);
     
     var courses = extractCourses();
     var output = '';
