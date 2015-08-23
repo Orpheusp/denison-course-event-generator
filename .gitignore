@@ -1,14 +1,6 @@
 
 *.sketch
 
-chrome-extension/._main.js
+._*
 
-._.gitignore
-
-chrome-extension/._course-event-CSV-generator.js
-
-chrome-extension/._background.js
-
-chrome-extension/._icon19.png
-
-chrome-extension/._course-final-iCal-generator.js
+chrome-extension/._*

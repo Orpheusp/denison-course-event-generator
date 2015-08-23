@@ -7,7 +7,7 @@ function addNewCourse(courses, courseTitle, courseEntities) {
     'Place' : [entityValue(courseEntities[2])],
     'Course ID' : entityValue(courseEntities[5]),
     'Instructor' : entityValue(courseEntities[11]).replace('(Pmailto:', '(') + ')',
-    'Exam Code' : entityValue(courseEntities[13])
+    'Exam Code' : entityValue(courseEntities[13]).trim()
   }
 }
 
@@ -54,7 +54,6 @@ function extractCourses() {
       }
     }
   }
-  logCourses(courses);
   return courses;
 }
 
